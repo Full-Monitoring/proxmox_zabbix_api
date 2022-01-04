@@ -28,8 +28,8 @@ nano proxmox
 ```sh
 #! /usr/bin/bash
 user=$1; tokenid=$2; secret=$3; ip=$4; port=$5;
-
-curl -H "Authorization: PVEAPIToken=$user!$tokenid=$secret" https://$ip:$port/api2/json/cluster/resources -k
+curl -H "Authorization: PVEAPIToken=$user!$tokenid=$secret" \
+https://$ip:$port/api2/json/cluster/resources -k --silent
 ```
 
 > Salve e saia do arquivo
