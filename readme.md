@@ -8,9 +8,9 @@
 
 > Material de apoio
 
-![Proxmox VE API](https://pve.proxmox.com/wiki/Proxmox_VE_API#API_URL)
+[Proxmox VE API](https://pve.proxmox.com/wiki/Proxmox_VE_API#API_URL)
 
-![https://www.cyberciti.biz/faq/how-to-curl-ignore-ssl-certificate-warnings-command-option/](https://www.cyberciti.biz/faq/how-to-curl-ignore-ssl-certificate-warnings-command-option/)
+[https://www.cyberciti.biz/faq/how-to-curl-ignore-ssl-certificate-warnings-command-option/](https://www.cyberciti.biz/faq/how-to-curl-ignore-ssl-certificate-warnings-command-option/)
 
 ```sh
 # Instalação do curl
