@@ -27,7 +27,7 @@ nano proxmox
 
 ```sh
 #! /usr/bin/bash
-curl -H "Authorization: PVEAPIToken=$1!$2=$3" https://$4:$5/api2/json/cluster/resources -k --silent
+curl -H "Authorization: PVEAPIToken=$1!$2=$3" https://$4:$5/api2/json/cluster/resources/ -k --silent
 ```
 
 > Salve e saia do arquivo
