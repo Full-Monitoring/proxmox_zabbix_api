@@ -35,7 +35,7 @@ https://$ip:$port/api2/json/cluster/resources -k --silent
 > Salve e saia do arquivo
 
 ```sh
-# Agora seu arquivel será execultável
+chown zabbix. /usr/lib/zabbix/externalscripts/proxmox
 chmod +x proxmox
 ```
 
