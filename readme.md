@@ -16,7 +16,7 @@
 
 ```sh
 # Instalação do curl
-apt install curl
+apt install curl jq
 # Acesse o diretorio...
 cd /usr/lib/zabbix/externalscripts
 # Crie o script "proxmox"
@@ -27,9 +27,7 @@ nano proxmox
 
 ```sh
 #! /usr/bin/bash
-user=$1; tokenid=$2; secret=$3; ip=$4; port=$5;
-curl -H "Authorization: PVEAPIToken=$user!$tokenid=$secret" \
-https://$ip:$port/api2/json/cluster/resources -k --silent
+curl -H "Authorization: PVEAPIToken=$1!$2=$3" https://$4:$5/api2/json/cluster/resources -k --silent
 ```
 
 > Salve e saia do arquivo
