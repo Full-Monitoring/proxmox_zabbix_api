@@ -1,8 +1,8 @@
 # Proxmox + Zabbix
 
-> Monitoramento do Proxmox com o Zabbix via script externo usando curl e autenticação via Api Token
+> Monitoring of Proxmox with Zabbix via external script using curl and authentication via Api Token
 
-## 🏗️ EM CONTRUÇÃO 🏗️
+## 🏗️ UNDER CONSTRUCTION 🏗️
 
 [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
@@ -12,7 +12,7 @@
 
 ![print](./img/print-storage.png "Print")
 
-## Material de apoio
+## Support links
 
 [Proxmox VE API](https://pve.proxmox.com/wiki/Proxmox_VE_API#API_URL)
 
@@ -24,32 +24,32 @@
 
 [Regex101.com](https://regex101.com/)
 
-## Dependências e Script
+## Dependencies and Script
 
 ```sh
-# Instalação do curl
+# Installation of curl
 apt install curl
-# Acesse o diretorio...
+# Access the directory...
 cd /usr/lib/zabbix/externalscripts
-# Crie o script "proxmox"
+# Create a script with the name "proxmox"
 nano proxmox
 ```
 
-> Copie e cole o script seguinte
+> Copy and paste the following script
 
 ```sh
 #! /usr/bin/bash
 curl -H "Authorization: PVEAPIToken=$1!$2=$3" https://$4:$5/api2/json/cluster/resources/ -k --silent
 ```
 
-> Salve e saia do arquivo
+> Save and exit file
 
 ```sh
 chown zabbix. /usr/lib/zabbix/externalscripts/proxmox
 chmod +x proxmox
 ```
 
-> Exemplo para testar o script
+> Example to test the script
 
 ```sh
 # Ex:
