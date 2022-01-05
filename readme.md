@@ -59,7 +59,7 @@ chmod +x proxmox
 ./proxmox root@pam dnriMrAAMBfacHdU ef43035e-1bd7-4e59-9469-68a290084a7d 172.33.255.2 8006
 ```
 
-> Se tudo der certo espera-se que seja retornado um json com os dados da maquinas virtuais e PVEs
+> If everything works out, it is expected that it will be returning a json with the data of the virtual machines and PVEs
 
 ## Telegram
 
