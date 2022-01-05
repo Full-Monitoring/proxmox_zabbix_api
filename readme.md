@@ -6,6 +6,10 @@
 
 [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
+## Grafana
+
+[Dashboard](grafana-dashboard.json)
+
 ![print](./img/print-vm.png "Print")
 
 ![print](./img/print-node.png "Print")
@@ -66,6 +70,8 @@ chmod +x proxmox
 ![alert](img/telegra_alert.png)
 
 ## Zabbix
+
+[Template](PROXMOX%20-%20SHEL%20SCRIPT%20-%20CURL%20-%20ZBX%205%204.yaml)
 
 ![zabbix](img/vm%20status.png)
 
