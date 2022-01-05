@@ -1,4 +1,4 @@
-# Proxmox + Zabbix
+# Proxmox + Zabbix + Grafana
 
 > Monitoring of Proxmox with Zabbix via external script using curl and authentication via Api Token
 
