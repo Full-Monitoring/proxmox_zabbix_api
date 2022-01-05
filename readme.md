@@ -16,6 +16,8 @@
 
 [Proxmox api-viewer](https://pve.proxmox.com/pve-docs/api-viewer/)
 
+[Regex101.com](https://regex101.com/)
+
 ## Dependências e Script
 
 ```sh
