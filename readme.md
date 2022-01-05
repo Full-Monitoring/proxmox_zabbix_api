@@ -4,7 +4,7 @@
 
 ## 🏗️ UNDER CONSTRUCTION 🏗️
 
-[Saulo Costa - Telegram](https://t.me/saulos2costa)
+For help: [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
 ## Grafana
 
