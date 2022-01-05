@@ -1,0 +1,1031 @@
+zabbix_export:
+  version: '5.4'
+  date: '2022-01-05T12:27:22Z'
+  groups:
+    -
+      uuid: c23a4c6ab43a4d3bb82eb944e662c63d
+      name: 'PROXMOX SERVERS'
+  templates:
+    -
+      uuid: cc95a7af1ce94d3283b21d73010d7563
+      template: 'PROXMOX - SHEL SCRIPT - CURL'
+      name: 'PROXMOX - SHEL SCRIPT - CURL'
+      description: 'Proxmox server monitoring using external script with curl requests. Authentication done via api token.'
+      groups:
+        -
+          name: 'PROXMOX SERVERS'
+      items:
+        -
+          uuid: f730f1cccd394d4bb69ce5a2dc644944
+          name: 'get Proxmox Data - NODE'
+          type: DEPENDENT
+          key: getProxmoxDataNode
+          delay: '0'
+          history: 20d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.body.data[?(@.type == ''node'')]'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: Application
+              value: node
+            -
+              tag: Application
+              value: proxmox
+        -
+          uuid: f2e4609f497746aea08332d70576ee51
+          name: 'get Proxmox Data - STORAGE'
+          type: DEPENDENT
+          key: getProxmoxDataStorage
+          delay: '0'
+          history: 20d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.body.data[?(@.type == ''storage'')]'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: storage
+        -
+          uuid: b703424e29b94e7888f9b2fcf41641ba
+          name: 'get Proxmox Data - VM'
+          type: DEPENDENT
+          key: getProxmoxDataVms
+          delay: '0'
+          history: 20d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.body.data[?(@.type == ''qemu'')]'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: vm
+        -
+          uuid: dd51ed21009b4e94942c1783266b9bc3
+          name: 'Total de Nodes'
+          type: DEPENDENT
+          key: node.total
+          delay: '0'
+          history: 20d
+          trends: 0d
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.length()
+          master_item:
+            key: getProxmoxDataNode
+          tags:
+            -
+              tag: Application
+              value: node
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: total
+        -
+          uuid: 018ef9b911f149c78bccc407900567ba
+          name: 'getData Proxmox Resources'
+          type: EXTERNAL
+          key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          delay: 20s
+          history: '0'
+          trends: '0'
+          value_type: CHAR
+          description: 'get Proxmox Data (VM, STORAGE, NODE, SDN)'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $..data.first()
+          tags:
+            -
+              tag: proxmox
+              value: 'get data'
+        -
+          uuid: 58e9ab645855413cb66f9c1ecaf380c3
+          name: 'Total de Storages'
+          type: DEPENDENT
+          key: storage.total
+          delay: '0'
+          history: 20d
+          trends: 0d
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.length()
+          master_item:
+            key: getProxmoxDataStorage
+          tags:
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: storage
+            -
+              tag: Application
+              value: total
+        -
+          uuid: f8fc420ed0bb49119895970015317fa7
+          name: 'Total de Storages Disponiveis'
+          type: DEPENDENT
+          key: storage.total.disponivel
+          delay: '0'
+          history: 20d
+          trends: 0d
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.status == ''available'')].length()'
+          master_item:
+            key: getProxmoxDataStorage
+          tags:
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: storage
+            -
+              tag: Application
+              value: total
+        -
+          uuid: 6100fc23b1cf43739cad12281aa51aff
+          name: 'Total de Storages Indisponiveis'
+          type: DEPENDENT
+          key: storage.total.indisponivel
+          delay: '0'
+          history: 20d
+          trends: 0d
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.status == ''unavailable'')].length()'
+          master_item:
+            key: getProxmoxDataStorage
+          tags:
+            -
+              tag: Application
+              value: proxmox
+            -
+              tag: Application
+              value: storage
+            -
+              tag: Application
+              value: total
+        -
+          uuid: 598b44073db54936a84b48341832b9ab
+          name: 'Total de VM''s'
+          type: DEPENDENT
+          key: vm.total
+          delay: '0'
+          history: 20d
+          trends: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.type == ''qemu'')].length()'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: proxmox
+              value: 'total vm'
+        -
+          uuid: bd69c91372704ab38ad3d3ebc2842423
+          name: 'Total VM''s Offline'
+          type: DEPENDENT
+          key: vm.total.desligadas
+          delay: '0'
+          history: 20d
+          trends: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.status == ''stopped'')].length()'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: proxmox
+              value: 'total vm off'
+        -
+          uuid: c5b3c3ff645d4929b998991ab7b69de9
+          name: 'Total VM''s Online'
+          type: DEPENDENT
+          key: vm.total.ligadas
+          delay: '0'
+          history: 20d
+          trends: '0'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.status == ''running'')].length()'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          tags:
+            -
+              tag: proxmox
+              value: 'total vm on'
+      discovery_rules:
+        -
+          uuid: c963b69110c444c595f000693f9ac514
+          name: 'Proxmox Discovery - NODE'
+          type: DEPENDENT
+          key: discovery.node
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: a22f3c7eb96a4c4597f37dcdb25c510e
+              name: 'getStatus {#NODE}'
+              type: HTTP_AGENT
+              key: 'get.pve.status[{#NODE}]'
+              delay: 20s
+              history: 7d
+              trends: '0'
+              status: DISABLED
+              value_type: CHAR
+              timeout: 15s
+              url: 'https://{$PVESERVER}:8006/api2/json/nodes/{#NODE}/status'
+              headers:
+                -
+                  name: Authorization
+                  value: 'PVEAPIToken={$PVETOKENID}={$PVESECRET}'
+              output_format: JSON
+            -
+              uuid: ecd84cfff0184e1386dac4efb6b6c6f8
+              name: '{#NODE} CPU PERCENT'
+              type: DEPENDENT
+              key: 'node.cpu[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              value_type: FLOAT
+              units: '%'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].cpu.first()'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '100'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: cpu
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 5e5c551f2f454d568770452737f9e349
+              name: '{#NODE} DISK PERCENT'
+              type: CALCULATED
+              key: 'node.diskpercent[{#NODE}]'
+              delay: 3m
+              trends: 90d
+              units: '%'
+              params: '100*last(//node.disk[{#NODE}])/last(//node.maxdisk[{#NODE}])'
+              tags:
+                -
+                  tag: Application
+                  value: diskpercent
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 138c154e542f4f7181fa05a900cb9b89
+              name: '{#NODE} DISK'
+              type: DEPENDENT
+              key: 'node.disk[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].disk.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: disk
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 8354742574604c5e9a4300bced534406
+              name: '{#NODE} MAXCPU'
+              type: DEPENDENT
+              key: 'node.maxcpu[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].maxcpu.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: maxcpu
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 88643fbeb3e8405c904a64c48c12b338
+              name: '{#NODE} MAXDISK'
+              type: DEPENDENT
+              key: 'node.maxdisk[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].maxdisk.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: maxdisk
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 2bbd9fa9b55f409c81f67f0185563118
+              name: '{#NODE} MAXMEM'
+              type: DEPENDENT
+              key: 'node.maxmem[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].maxmem.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: maxmem
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: a974e50dd07546a0ad20cbfd070b53f2
+              name: '{#NODE} MEMPERCENT'
+              type: CALCULATED
+              key: 'node.mempercent[{#NODE}]'
+              delay: 3m
+              trends: 90d
+              units: '%'
+              params: '100*last(//node.mem[{#NODE}])/last(//node.maxmem[{#NODE}])'
+              tags:
+                -
+                  tag: Application
+                  value: memoriapercent
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 8e77b50feafe40cdbfd0a330d24994a8
+              name: '{#NODE} MEMORIA'
+              type: DEPENDENT
+              key: 'node.mem[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].mem.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: memoria
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+            -
+              uuid: 5393afa42cd745268f2a5bb5ac69d97e
+              name: '{#NODE} STATUS'
+              type: DEPENDENT
+              key: 'node.status[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].status.first()'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 'online'){
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: status
+            -
+              uuid: b42f4f5af5274143964f64f7a9c83eed
+              name: '{#NODE} UPTIME'
+              type: DEPENDENT
+              key: 'node.uptime[{#NODE}]'
+              delay: '0'
+              trends: 90d
+              units: uptime
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.node == ''{#NODE}'')].uptime.first()'
+              master_item:
+                key: getProxmoxDataNode
+              tags:
+                -
+                  tag: Application
+                  value: node
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: uptime
+          master_item:
+            key: getProxmoxDataNode
+          lld_macro_paths:
+            -
+              lld_macro: '{#NODE}'
+              path: $.node
+        -
+          uuid: 099a1d702a954f139c327b4e59d00f7e
+          name: 'Proxmox Discovery - STORAGE'
+          type: DEPENDENT
+          key: discovery.storage
+          delay: '0'
+          item_prototypes:
+            -
+              uuid: daa0a290b5794d4ab030c6f8186bfea4
+              name: '{#NODE} - {#STORAGE} DISK'
+              type: DEPENDENT
+              key: 'storage.disk[{#STORAGE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.storage == ''{#STORAGE}'')].disk.first()'
+              master_item:
+                key: getProxmoxDataStorage
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: storage
+            -
+              uuid: 6422bacf7a23425e9600d8db65961cff
+              name: '{#NODE} - {#STORAGE} MAXDISK'
+              type: DEPENDENT
+              key: 'storage.maxdisk[{#STORAGE}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.storage == ''{#STORAGE}'')].maxdisk.first()'
+              master_item:
+                key: getProxmoxDataStorage
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: storage
+            -
+              uuid: aaca305c70e543fbb79b6147b490d263
+              name: '{#NODE} - {#STORAGE} DISK PERCENT'
+              type: CALCULATED
+              key: 'storage.percent.disk[{#STORAGE}]'
+              delay: 3m
+              trends: 90d
+              units: '%'
+              params: '100*last(//storage.disk[{#STORAGE}])/last(//storage.maxdisk[{#STORAGE}])'
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: storage
+            -
+              uuid: fb5eaa76fcc240ada8c334a48f53c8f2
+              name: '{#NODE} - {#STORAGE} STATUS'
+              type: DEPENDENT
+              key: 'storage.status[{#STORAGE}]'
+              delay: '0'
+              trends: 90d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.storage == ''{#STORAGE}'')].status.first()'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 'available'){
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+              master_item:
+                key: getProxmoxDataStorage
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: status
+                -
+                  tag: Application
+                  value: storage
+          master_item:
+            key: getProxmoxDataStorage
+          lld_macro_paths:
+            -
+              lld_macro: '{#NODE}'
+              path: $.node
+            -
+              lld_macro: '{#STORAGE}'
+              path: $.storage
+        -
+          uuid: 8aad724784ed48fabca6623ab005f95d
+          name: 'Proxmox Discovery - VM'
+          type: DEPENDENT
+          key: discovery.vms
+          delay: '0'
+          filter:
+            conditions:
+              -
+                macro: '{#TYPE}'
+                value: qemu
+                formulaid: A
+          description: proxmox.cluster.resources
+          item_prototypes:
+            -
+              uuid: 789e996e31a24f2581c46b57b8cc0701
+              name: 'getCurrent {#VMID} {#NAME}'
+              type: HTTP_AGENT
+              key: 'get.vm.current[{#NAME}]'
+              delay: 20s
+              history: 7d
+              trends: '0'
+              status: DISABLED
+              value_type: CHAR
+              timeout: 15s
+              url: 'https://{$PVESERVER}:8006/api2/json/nodes/{#NODE}/qemu/{#VMID}/status/current'
+              headers:
+                -
+                  name: Authorization
+                  value: 'PVEAPIToken={$PVETOKENID}={$PVESECRET}'
+              output_format: JSON
+            -
+              uuid: 32464ca7a6b446fea15be46a2f6451af
+              name: '{#NODE} - {#VMID} - {#NAME} CPU'
+              type: DEPENDENT
+              key: 'vm.cpu[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              value_type: FLOAT
+              units: '%'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].cpu.first()'
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '100'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: cpu
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: 824a9b373ebb4cd0bbc07460b7aff72d
+              name: '{#NODE} - {#VMID} - {#NAME} DISKUSED'
+              type: DEPENDENT
+              key: 'vm.diskused[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].uptime.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: diskused
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: cdaead06f6c444fe897fc5ac4df2b238
+              name: '{#NODE} - {#VMID} - {#NAME} MAXCPU'
+              type: DEPENDENT
+              key: 'vm.maxcpu[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].maxcpu.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: maxcpu
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: 4f69a430d0ac4eea85a1245fecea3f0f
+              name: '{#NODE} - {#VMID} - {#NAME} MAXMEM'
+              type: DEPENDENT
+              key: 'vm.maxmem[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].maxmem.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: maxmem
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: 4cdd28174f4845e2943ea25a2eaaaf1f
+              name: '{#NODE} - {#VMID} - {#NAME} MEMPERCENT'
+              type: CALCULATED
+              key: 'vm.mempercent[{#NAME}]'
+              delay: 3m
+              trends: 90d
+              units: '%'
+              params: '100*last(//vm.mem[{#NAME}])/last(//vm.maxmem[{#NAME}])'
+              tags:
+                -
+                  tag: Application
+                  value: memoriapercent
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: a17d1036181d4459bfa6177ad81464a4
+              name: '{#NODE} - {#VMID} - {#NAME} MEMORIA'
+              type: DEPENDENT
+              key: 'vm.mem[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].mem.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: memoria
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: df56e78610274e5299fd8f051e26a933
+              name: '{#NODE} - {#VMID} - {#NAME} NETIN'
+              type: DEPENDENT
+              key: 'vm.netin[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              units: B
+              description: 'Tráfego total de entrada da VM {#NAME}'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].netin.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: netin
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: 3297bbfa26c2465da29c56d592e575ac
+              name: '{#NODE} - {#VMID} - {#NAME} NETOUT'
+              type: DEPENDENT
+              key: 'vm.netout[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              units: B
+              description: 'Tráfego total de saida da VM {#NAME}'
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].netout.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: netout
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: f93b2c2318504da297b675870fdf331e
+              name: '{#NODE} - {#VMID} - {#NAME} STATUS'
+              type: DEPENDENT
+              key: 'vm.status[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].status.first()'
+                -
+                  type: JAVASCRIPT
+                  parameters:
+                    - |
+                      if (value == 'running'){
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: status
+                -
+                  tag: Application
+                  value: vm
+            -
+              uuid: f539ba7d093d4f67a6266b22530209cd
+              name: '{#NODE} - {#VMID} - {#NAME} UPTIME'
+              type: DEPENDENT
+              key: 'vm.uptime[{#NAME}]'
+              delay: '0'
+              trends: 90d
+              value_type: FLOAT
+              units: uptime
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.name == ''{#NAME}'')].uptime.first()'
+              master_item:
+                key: getProxmoxDataVms
+              tags:
+                -
+                  tag: Application
+                  value: proxmox
+                -
+                  tag: Application
+                  value: uptime
+                -
+                  tag: Application
+                  value: vm
+              trigger_prototypes:
+                -
+                  uuid: 6c25f1a3400a44f9ac0fe7c69bb320ff
+                  expression: 'last(/PROXMOX - SHEL SCRIPT - CURL/vm.uptime[{#NAME}])<300'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/PROXMOX - SHEL SCRIPT - CURL/vm.uptime[{#NAME}])>300'
+                  name: '{#NODE} - {#VMID} - {#NAME}'
+                  opdata: DESLIGOU
+                  priority: HIGH
+          graph_prototypes:
+            -
+              uuid: 24e2208f3a7f4d488d6413e716c9a009
+              name: 'CPU - {#NAME}'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: F63100
+                  item:
+                    host: 'PROXMOX - SHEL SCRIPT - CURL'
+                    key: 'vm.cpu[{#NAME}]'
+            -
+              uuid: 0b521a710bab43df878c512910f23f81
+              name: 'MEMORIA -  - {#NAME}'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'PROXMOX - SHEL SCRIPT - CURL'
+                    key: 'vm.mem[{#NAME}]'
+            -
+              uuid: b1f7671c631b46718e158c916d412231
+              name: 'Trafego Total In Ount - {#NAME}'
+              show_work_period: 'NO'
+              show_triggers: 'NO'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 1A7C11
+                  item:
+                    host: 'PROXMOX - SHEL SCRIPT - CURL'
+                    key: 'vm.netin[{#NAME}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'PROXMOX - SHEL SCRIPT - CURL'
+                    key: 'vm.netout[{#NAME}]'
+          master_item:
+            key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+          lld_macro_paths:
+            -
+              lld_macro: '{#NAME}'
+              path: $.name
+            -
+              lld_macro: '{#NODE}'
+              path: $.node
+            -
+              lld_macro: '{#TYPE}'
+              path: $.type
+            -
+              lld_macro: '{#VMID}'
+              path: $.vmid
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.body.data
+      macros:
+        -
+          macro: '{$IP}'
+          value: 172.33.255.2
+          description: 'Proxmox server ip'
+        -
+          macro: '{$PORT}'
+          value: '8006'
+          description: 'http port of the proxy server'
+        -
+          macro: '{$SECRET}'
+          value: '**********'
+          description: 'secret generated when creating the token api'
+        -
+          macro: '{$TOKENID}'
+          value: '**********'
+          description: 'generated token id'
+        -
+          macro: '{$USER}'
+          value: root@pam
+          description: username
