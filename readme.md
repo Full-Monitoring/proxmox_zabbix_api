@@ -12,6 +12,8 @@
 
 [How to ignore invalid and self signed ssl connection errors with curl](https://www.cyberciti.biz/faq/how-to-curl-ignore-ssl-certificate-warnings-command-option/)
 
+[remontti/Zabbix-Templates](https://github.com/remontti/Zabbix-Templates/blob/main/Huawei/BGP/README.md)
+
 ## Dependências e Script
 
 ```sh
