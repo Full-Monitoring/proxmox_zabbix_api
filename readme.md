@@ -54,3 +54,13 @@ chmod +x proxmox
 ```
 
 > Se tudo der certo espera-se que seja retornado um json com os dados da maquinas virtuais e PVEs
+
+## Telegram
+
+![alert](img/telegra_alert.png)
+
+## Zabbix
+
+![zabbix](img/vm%20status.png)
+
+![zabbix](img/itens.png)
