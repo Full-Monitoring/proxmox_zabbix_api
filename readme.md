@@ -16,7 +16,7 @@
 
 ```sh
 # Instalação do curl
-apt install curl jq
+apt install curl
 # Acesse o diretorio...
 cd /usr/lib/zabbix/externalscripts
 # Crie o script "proxmox"
