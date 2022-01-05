@@ -1,6 +1,6 @@
 zabbix_export:
   version: '5.4'
-  date: '2022-01-05T16:14:52Z'
+  date: '2022-01-05T17:57:19Z'
   groups:
     -
       uuid: c23a4c6ab43a4d3bb82eb944e662c63d
@@ -20,7 +20,7 @@ zabbix_export:
           name: 'getData Proxmox Resources'
           type: EXTERNAL
           key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
-          delay: 20s
+          delay: 3m
           history: '0'
           trends: '0'
           value_type: CHAR
@@ -39,7 +39,7 @@ zabbix_export:
           type: DEPENDENT
           key: storage.total.available
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -58,7 +58,7 @@ zabbix_export:
           type: DEPENDENT
           key: storage.total.unavailable
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -77,7 +77,7 @@ zabbix_export:
           type: DEPENDENT
           key: storages.total
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -96,7 +96,7 @@ zabbix_export:
           type: DEPENDENT
           key: total.nodes
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -115,7 +115,7 @@ zabbix_export:
           type: DEPENDENT
           key: vm.total
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -134,7 +134,7 @@ zabbix_export:
           type: DEPENDENT
           key: vm.total.desligadas
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -153,7 +153,7 @@ zabbix_export:
           type: DEPENDENT
           key: vm.total.ligadas
           delay: '0'
-          history: 20d
+          history: 30d
           trends: '0'
           preprocessing:
             -
@@ -188,6 +188,7 @@ zabbix_export:
               delay: '0'
               history: 30d
               trends: 60d
+              value_type: FLOAT
               units: '%'
               preprocessing:
                 -
@@ -198,12 +199,70 @@ zabbix_export:
                   type: MULTIPLIER
                   parameters:
                     - '100'
+                -
+                  type: REGEX
+                  parameters:
+                    - ^(\d+)\..+$
+                    - \1
               master_item:
                 key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
               tags:
                 -
                   tag: proxmox
                   value: 'node cpu'
+            -
+              uuid: 195bd3b482854fff92eb7d90a01226ef
+              name: '{#NODE} - {#ID} DISK PERCENT'
+              type: CALCULATED
+              key: 'node.disk.percent[{#ID}]'
+              history: 30d
+              trends: 60d
+              units: '%'
+              params: '100*last(//node.disk[{#ID}])/last(//node.max.disk[{#ID}])'
+              tags:
+                -
+                  tag: proxmox
+                  value: 'node disk percent'
+            -
+              uuid: 288d0e2b123043609447eecb4bfeec7f
+              name: '{#NODE} - {#ID} DISK'
+              type: DEPENDENT
+              key: 'node.disk[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: 60d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.id== ''{#ID}'')].disk.first()'
+              master_item:
+                key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+              tags:
+                -
+                  tag: proxmox
+                  value: 'node disk'
+            -
+              uuid: 9ef309b1219d4ffca1dee5228e31407c
+              name: '{#NODE} - {#ID} DISK MAX'
+              type: DEPENDENT
+              key: 'node.max.disk[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: 60d
+              units: b
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.id== ''{#ID}'')].maxdisk.first()'
+              master_item:
+                key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+              tags:
+                -
+                  tag: proxmox
+                  value: 'node max disk'
             -
               uuid: f24b29ce32614f8581328a0d77d68bda
               name: '{#NODE} - {#ID} MEMORY MAX'
@@ -272,6 +331,8 @@ zabbix_export:
                   type: JSONPATH
                   parameters:
                     - '$.[?(@.id== ''{#ID}'')].status.first()'
+                  error_handler: CUSTOM_VALUE
+                  error_handler_params: offline
                 -
                   type: JAVASCRIPT
                   parameters:
@@ -287,6 +348,26 @@ zabbix_export:
                 -
                   tag: proxmox
                   value: 'node status'
+            -
+              uuid: a7a22ad0fd4247a98e3b17614c4758c2
+              name: '{#NODE} - {#ID} UPTIME'
+              type: DEPENDENT
+              key: 'node.uptime[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: 60d
+              units: uptime
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.id== ''{#ID}'')].uptime.first()'
+              master_item:
+                key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+              tags:
+                -
+                  tag: proxmox
+                  value: 'node uptime'
           master_item:
             key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
           lld_macro_paths:
@@ -427,6 +508,25 @@ zabbix_export:
                 formulaid: A
           item_prototypes:
             -
+              uuid: 710a424b033a42389539b64e739a1d29
+              name: '{#NODE} - {#ID} - {#NAME} CPU QUANTITY'
+              type: DEPENDENT
+              key: 'vm.cpu.quantity[{#ID}]'
+              delay: '0'
+              history: 30d
+              trends: 60d
+              preprocessing:
+                -
+                  type: JSONPATH
+                  parameters:
+                    - '$.[?(@.id== ''{#ID}'')].maxcpu.first()'
+              master_item:
+                key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
+              tags:
+                -
+                  tag: proxmox
+                  value: 'vm cpu quantity'
+            -
               uuid: 10327c999b3f4cda8bdca1afe967046a
               name: '{#NODE} - {#ID} - {#NAME} CPU'
               type: DEPENDENT
@@ -445,6 +545,12 @@ zabbix_export:
                   type: MULTIPLIER
                   parameters:
                     - '100'
+                -
+                  type: REGEX
+                  parameters:
+                    - ^(\d+)\..+$
+                    - \1
+                  error_handler: DISCARD_VALUE
               master_item:
                 key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
               tags:
@@ -484,6 +590,15 @@ zabbix_export:
                 -
                   tag: proxmox
                   value: 'vm memory percentage'
+              trigger_prototypes:
+                -
+                  uuid: 742a76ebc666435db66c51aeeb759a57
+                  expression: 'avg(/PROXMOX - SHEL SCRIPT - CURL/vm.memory.percentage[{#ID}],1)>75'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'avg(/PROXMOX - SHEL SCRIPT - CURL/vm.memory.percentage[{#ID}],1)<75'
+                  name: '{#NODE} - {#ID} - {#NAME} MEMORY PERCENT'
+                  status: DISABLED
+                  priority: AVERAGE
             -
               uuid: 5106846aeeb2415db485c8b6f9c07016
               name: '{#NODE} - {#ID} - {#NAME} MEMORY'
@@ -534,6 +649,14 @@ zabbix_export:
                 -
                   tag: proxmox
                   value: 'vm status'
+              trigger_prototypes:
+                -
+                  uuid: 127b517e81df4c1f8a18dd248cca06d0
+                  expression: 'last(/PROXMOX - SHEL SCRIPT - CURL/vm.status[{#ID}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/PROXMOX - SHEL SCRIPT - CURL/vm.status[{#ID}])=1'
+                  name: '{#NODE} - {#ID} - {#NAME} STATUS - OFFLINE'
+                  priority: AVERAGE
             -
               uuid: 69f99dd0197444ea971196844ad30279
               name: '{#NODE} - {#ID} - {#NAME} UPTIME'
@@ -554,6 +677,22 @@ zabbix_export:
                 -
                   tag: proxmox
                   value: 'vm uptime'
+          graph_prototypes:
+            -
+              uuid: e0b087579eb0479aba682358ff27d69c
+              name: '{#NODE} - {#ID} - {#NAME} MEMORY PERCENT'
+              show_work_period: 'NO'
+              ymin_type_1: FIXED
+              ymax_type_1: FIXED
+              graph_items:
+                -
+                  sortorder: '1'
+                  drawtype: GRADIENT_LINE
+                  color: 00FFBF
+                  calc_fnc: ALL
+                  item:
+                    host: 'PROXMOX - SHEL SCRIPT - CURL'
+                    key: 'vm.memory.percentage[{#ID}]'
           master_item:
             key: 'proxmox[{$USER}, {$TOKENID}, {$SECRET}, {$IP}, {$PORT}]'
           lld_macro_paths:
