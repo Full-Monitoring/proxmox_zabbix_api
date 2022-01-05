@@ -14,6 +14,8 @@
 
 [remontti/Zabbix-Templates](https://github.com/remontti/Zabbix-Templates/blob/main/Huawei/BGP/README.md)
 
+[Proxmox api-viewer](https://pve.proxmox.com/pve-docs/api-viewer/)
+
 ## Dependências e Script
 
 ```sh
