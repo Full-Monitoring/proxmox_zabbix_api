@@ -6,6 +6,12 @@
 
 [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
+![print](./img/print-vm.png "Print")
+
+![print](./img/print-node.png "Print")
+
+![print](./img/print-storage.png "Print")
+
 ## Material de apoio
 
 [Proxmox VE API](https://pve.proxmox.com/wiki/Proxmox_VE_API#API_URL)
