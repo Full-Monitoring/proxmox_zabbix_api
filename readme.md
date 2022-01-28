@@ -73,6 +73,7 @@ chmod +x proxmox
 
 [Template](PROXMOX%20-%20SHEL%20SCRIPT%20-%20CURL%20-%20ZBX%205%204.yaml)
 
+> Itens
+> ![zabbix](img/itens.png)
+> Status
 ![zabbix](img/vm%20status.png)
-
-![zabbix](img/itens.png)
