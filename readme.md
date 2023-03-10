@@ -1,10 +1,10 @@
 # Proxmox + Zabbix + Grafana
 
+See ... [New method / template](https://github.com/Full-Monitoring/oluas_proxmox)
+
 > Monitoring of Proxmox with Zabbix via external script using curl and authentication via Api Token
 
 ## 🏗️ UNDER CONSTRUCTION 🏗️
-
-See ... [New method](https://github.com/Full-Monitoring/oluas_proxmox)
 
 4Help: [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
