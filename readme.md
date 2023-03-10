@@ -4,6 +4,8 @@
 
 ## 🏗️ UNDER CONSTRUCTION 🏗️
 
+See ... [New method](https://github.com/Full-Monitoring/oluas_proxmox)
+
 4Help: [Saulo Costa - Telegram](https://t.me/saulos2costa)
 
 ## Grafana
